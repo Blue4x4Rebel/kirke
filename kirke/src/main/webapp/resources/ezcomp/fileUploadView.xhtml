@@ -12,12 +12,15 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <!-- h:outputScript name="jsf.js" library="javax.faces" target="head" / -->
-        <div class="row collapse prefix-radius">
+        <div class="row">
             <div class="small-2 columns">
-                <label for="fileBtn" styleClass="right inline">File</label>        
+                <h:outputLabel for="fileBtn" styleClass="right inline">File: </h:outputLabel>        
             </div>
-            <div class="small-8 columns">
-                <h:commandButton id="fileBtn" type="button" value="Browse..." styleClass="button" />
+            <div class="small-6 columns">
+                <h:inputText readonly="true" id="fileName" value="$('#form\\:fileUploadView\\:file').value" />
+            </div>
+            <div class="small-3 columns end">
+                <h:commandButton id="fileBtn" type="button" value="Browse..." styleClass="button postfix" />
             </div>
         </div>
         <div id="hideFile" style="position: relative; left: -9999px; height: 0px; overflow: hidden;">
@@ -28,7 +31,7 @@
         <script>
             $(document).ready(function() {
                 $("#form\\:fileUploadView\\:fileBtn").click(function() {
-                    alert('Ready!');
+                    //alert('Ready!');
                     $("#form\\:fileUploadView\\:file").trigger('click');
                     return false;
                 });

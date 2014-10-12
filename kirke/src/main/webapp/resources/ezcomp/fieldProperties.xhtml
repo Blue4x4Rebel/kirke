@@ -10,8 +10,10 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <h4>Set Field Properties</h4>
-        <h:outputText value="#{sourceWizardBean.currentFieldIdx + 1} / #{sourceWizardBean.fields.size()}" />
-        <h:inputText label="Name:" value="#{sourceWizardBean.fields.get(sourceWizardBean.currentFieldIdx).name}" />
+        <h4>Set Field Properties
+            (<h:outputText value="#{sourceWizardBean.currentFieldIdx + 1} / #{sourceWizardBean.fields.size()}" />)
+        </h4>
+        <label for="form:fieldProperties:name">Name</label>
+        <h:inputText id="name" value="#{sourceWizardBean.currentFieldName}" />
     </cc:implementation>
 </html>

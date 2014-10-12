@@ -11,18 +11,23 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <h:selectBooleanCheckbox value="#{sourceWizardBean.headerRow}" label="First row is header" />
-        <h:selectOneRadio value="#{sourceWizardBean.fieldType}"
-                          onchange="document.getElementById('delimGroup').style.display = (value == 'delimited' ? 'block' : 'none')">
-            <f:selectItem itemValue="delimited" itemLabel="Delimited" />
-            <f:selectItem itemValue="fixed" itemLabel="Fixed-width" />
-        </h:selectOneRadio>
-        <div id="delimGroup" style="display: #{sourceWizardBean.fieldType == 'delimited' ? 'block' : 'none'}">
-            <h:outputLabel value="Delimiter:" />
-            <h:inputText value="#{sourceWizardBean.delimiter}" converter="javax.faces.Character">
-                <f:validateLength maximum="1" />
-            </h:inputText>
-        </div>
-        <h:commandButton value="Next" class="button" actionListener="#{sourceWizardBean.finishFileProperties()}" />
+        <f:ajax>
+            <h:outputLabel for="form:fileProperties:headerRowChk">First row is a header</h:outputLabel>
+            <h:selectBooleanCheckbox id="headerRowChk" value="#{sourceWizardBean.headerRow}" />
+            <h:selectOneRadio value="#{sourceWizardBean.fieldType}"
+                              onchange="document.getElementById('delimGroup').style.display = (value == 'delimited' ? 'block' : 'none')">
+                <f:selectItem itemValue="delimited" itemLabel="Delimited" />
+                <f:selectItem itemValue="fixed" itemLabel="Fixed-width" />
+            </h:selectOneRadio>
+            <div id="delimGroup" style="display: #{sourceWizardBean.fieldType == 'delimited' ? 'block' : 'none'}">
+                <h:outputLabel value="Delimiter:" />
+                <h:inputText value="#{sourceWizardBean.delimiter}" converter="javax.faces.Character">
+                    <f:validateLength maximum="1" />
+                </h:inputText>
+            </div>
+            <h:commandButton type="button" value="Next" class="button">
+                <f:ajax event="click" render="@form" listener="#{sourceWizardBean.finishFileProperties()}" />
+            </h:commandButton>
+        </f:ajax>
     </cc:implementation>
 </html>

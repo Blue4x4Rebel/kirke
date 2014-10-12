@@ -12,6 +12,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -37,7 +40,7 @@ import javax.servlet.http.Part;
 public class SourceWizardBean implements Serializable {
 
     private Part tmpFileUploadPart;
-    private File tmpUploadFile;
+    private Path tmpUploadFile;
     private HtmlPanelGroup dataTableGroup;
     private UIComponent formComponent;
     private FieldType fieldType;
@@ -58,7 +61,6 @@ public class SourceWizardBean implements Serializable {
     
     public void handleFileUpload() {
         if( tmpFileUploadPart == null ) return;
-        //tmpUploadFile = tmpFileUploadPart.
         try {
             String firstLine = new BufferedReader(
                     new InputStreamReader(tmpFileUploadPart.getInputStream()))
@@ -68,21 +70,26 @@ public class SourceWizardBean implements Serializable {
 
             this.dataTableGroup.getChildren().add(flText);
             loadCompositeComponent(formComponent, "ezcomp", "fileProperties.xhtml", "fileProperties");
+            
+            // Save the file for later...
+            tmpUploadFile = Files.createTempFile(tmpFileUploadPart.getName(), "");
+            tmpFileUploadPart.write(tmpUploadFile.toString());
         } catch (IOException e) {
-          // Error handling
+            // TODO: Log it!
         }
     }
     
     public void finishFileProperties() throws IOException {
         // TODO: Validate tmpFileUploadPart properties....
         fields = new ArrayList<>();
+        System.out.println("Field type: "+fieldType);
         if( fieldType == FieldType.delimited ) {
-            String firstLine = new BufferedReader(
-                new InputStreamReader(tmpFileUploadPart.getInputStream()))
-                    .readLine();
+            System.out.println("Delimited!");
+            String firstLine = Files.lines(tmpUploadFile).findFirst().get();
             Scanner sc = new Scanner(firstLine).useDelimiter(Character.toString(delimiter));
             while(sc.hasNext()) {
                 String name = sc.next();
+                System.out.println("Found field "+name);
                 fields.add(new Field(isHeaderRow() ? name : null));
             }
         } else {
@@ -90,6 +97,7 @@ public class SourceWizardBean implements Serializable {
         }
         currentFieldIdx = 0;
         loadCompositeComponent(formComponent, "ezcomp", "fieldProperties.xhtml", "fieldProperties"+currentFieldIdx);
+        // TODO: Reset the preview to a grid!
     }
     
     private void generateTableFromColumnList(List<Field> fields) {
@@ -123,6 +131,17 @@ public class SourceWizardBean implements Serializable {
         } finally {
             parent.popComponentFromEL(context);
         }
+    }
+    
+    /**
+     * @return the name of the current field
+     */
+    public String getCurrentFieldName() {
+        return fields.get(currentFieldIdx).getName();
+    }
+    
+    public void setCurrentFieldName(String name) {
+        fields.get(currentFieldIdx).setName(name);
     }
 
     /**
