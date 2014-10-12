@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" >
     <h:head>
         <title>Source Wizard</title>
         <meta charset="utf-8" />
@@ -13,7 +14,7 @@
         <link rel="stylesheet" href="css/foundation.css" />
 
         <!-- If you are using the gem version, you need this only -->
-        <link rel="stylesheet" href="css/app.css" />
+        <!-- link rel="stylesheet" href="css/app.css" / -->
 
         <script src="js/vendor/modernizr.js"></script>
 
@@ -27,21 +28,28 @@
                 <dd data-magellan-arrival="colDef">Define Columns</dd>
             </dl>
         </div>
-        <form>
+        <h:form id="form" enctype="multipart/form-data">
             <div class="row">
                 <div class="small-10 small-push-2 columns">
-                    <h3>Specify Input File</h3>
+                    <h4>Specify Input File</h4>
                 </div>
             </div>
             <div class="row collapse prefix-radius">
-                <div class="small-2 small-push-2 columns">
-                    <span class="prefix">File:</span>
-                </div>
-                <div class="small-8 columns">
-                    <input type="file" class="button" name="inputFile"/>
+                <div class="small-10 columns">
+                    <h:panelGroup id="formComponent" binding="#{sourceWizardBean.formComponent}" />
                 </div>
             </div>
-        </form>
+            <div class="row">
+                <div class="small-10 small-push-2 columns">
+                    <h4>Preview</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-10 small-push-2 columns">
+                    <h:panelGroup id="dataTable" binding="#{sourceWizardBean.dataTableGroup}" />
+                </div>
+            </div>                 
+        </h:form>
       <script src="js/vendor/jquery.js"></script>
       <script src="js/foundation.min.js"></script>
       <script src="js/foundation/foundation.magellan.js"></script>
