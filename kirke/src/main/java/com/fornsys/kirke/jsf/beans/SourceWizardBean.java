@@ -1,12 +1,13 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template tmpFileUploadPart, choose Tools | Templates
  * and open the template in the editor.
  */
 package com.fornsys.kirke.jsf.beans;
 
 import com.fornsys.kirke.model.Field;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,7 +36,8 @@ import javax.servlet.http.Part;
 @SessionScoped
 public class SourceWizardBean implements Serializable {
 
-    private Part file;
+    private Part tmpFileUploadPart;
+    private File tmpUploadFile;
     private HtmlPanelGroup dataTableGroup;
     private UIComponent formComponent;
     private FieldType fieldType;
@@ -55,10 +57,11 @@ public class SourceWizardBean implements Serializable {
     }
     
     public void handleFileUpload() {
-        if( file == null ) return;
+        if( tmpFileUploadPart == null ) return;
+        //tmpUploadFile = tmpFileUploadPart.
         try {
             String firstLine = new BufferedReader(
-                    new InputStreamReader(file.getInputStream()))
+                    new InputStreamReader(tmpFileUploadPart.getInputStream()))
                 .readLine();
             HtmlOutputText flText = new HtmlOutputText();
             flText.setValue(firstLine);
@@ -71,11 +74,11 @@ public class SourceWizardBean implements Serializable {
     }
     
     public void finishFileProperties() throws IOException {
-        // TODO: Validate file properties....
+        // TODO: Validate tmpFileUploadPart properties....
         fields = new ArrayList<>();
         if( fieldType == FieldType.delimited ) {
             String firstLine = new BufferedReader(
-                new InputStreamReader(file.getInputStream()))
+                new InputStreamReader(tmpFileUploadPart.getInputStream()))
                     .readLine();
             Scanner sc = new Scanner(firstLine).useDelimiter(Character.toString(delimiter));
             while(sc.hasNext()) {
@@ -109,7 +112,7 @@ public class SourceWizardBean implements Serializable {
         implementation.setRendererType("javax.faces.Group");
         composite.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, implementation);
 
-        // Now include the composite component file in the given parent.
+        // Now include the composite component tmpFileUploadPart in the given parent.
         parent.getChildren().clear();
         parent.getChildren().add(composite);
         parent.pushComponentToEL(context, composite); // This makes #{cc} available.
@@ -123,17 +126,17 @@ public class SourceWizardBean implements Serializable {
     }
 
     /**
-     * @return the file
+     * @return the tmpFileUploadPart
      */
     public Part getFile() {
-        return file;
+        return tmpFileUploadPart;
     }
 
     /**
-     * @param file the file to set
+     * @param file the tmpFileUploadPart to set
      */
     public void setFile(Part file) {
-        this.file = file;
+        this.tmpFileUploadPart = file;
     }
     
     /**

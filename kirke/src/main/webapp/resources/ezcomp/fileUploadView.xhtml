@@ -11,9 +11,28 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <h:outputLabel value="File: " />
-        <h:inputFile id="file" value="#{sourceWizardBean.file}">
-            <f:ajax event="change" listener="${sourceWizardBean.handleFileUpload()}" render="@form" />
-        </h:inputFile>
+        <!-- h:outputScript name="jsf.js" library="javax.faces" target="head" / -->
+        <div class="row collapse prefix-radius">
+            <div class="small-2 columns">
+                <label for="fileBtn" styleClass="right inline">File</label>        
+            </div>
+            <div class="small-8 columns">
+                <h:commandButton id="fileBtn" type="button" value="Browse..." styleClass="button" />
+            </div>
+        </div>
+        <div id="hideFile" style="position: relative; left: -9999px; height: 0px; overflow: hidden;">
+            <h:inputFile id="file" value="#{sourceWizardBean.file}">
+                <f:ajax event="change" listener="#{sourceWizardBean.handleFileUpload()}" render="@form" />
+            </h:inputFile>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $("#form\\:fileUploadView\\:fileBtn").click(function() {
+                    alert('Ready!');
+                    $("#form\\:fileUploadView\\:file").trigger('click');
+                    return false;
+                });
+            });
+        </script>
     </cc:implementation>
 </html>

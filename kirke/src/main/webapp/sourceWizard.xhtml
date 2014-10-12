@@ -17,7 +17,7 @@
         <!-- link rel="stylesheet" href="css/app.css" / -->
 
         <script src="js/vendor/modernizr.js"></script>
-
+        <script src="js/vendor/jquery.js"></script>
 
     </h:head>
     <h:body>
@@ -30,17 +30,17 @@
         </div>
         <h:form id="form" enctype="multipart/form-data">
             <div class="row">
-                <div class="small-10 small-push-2 columns">
-                    <h4>Specify Input File</h4>
+                <div class="small-12 small-centered columns">
+                    <h3>Source Wizard</h3>
                 </div>
             </div>
             <div class="row collapse prefix-radius">
-                <div class="small-10 columns">
+                <div class="small-12 columns">
                     <h:panelGroup id="formComponent" binding="#{sourceWizardBean.formComponent}" />
                 </div>
             </div>
             <div class="row">
-                <div class="small-10 small-push-2 columns">
+                <div class="small-12 columns">
                     <h4>Preview</h4>
                 </div>
             </div>
@@ -50,7 +50,6 @@
                 </div>
             </div>                 
         </h:form>
-      <script src="js/vendor/jquery.js"></script>
       <script src="js/foundation.min.js"></script>
       <script src="js/foundation/foundation.magellan.js"></script>
       <script>
