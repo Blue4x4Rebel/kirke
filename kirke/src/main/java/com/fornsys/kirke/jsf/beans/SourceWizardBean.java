@@ -7,14 +7,11 @@ package com.fornsys.kirke.jsf.beans;
 
 import com.fornsys.kirke.model.Field;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,6 +22,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
+import javax.faces.component.html.HtmlColumn;
+import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
@@ -76,6 +75,8 @@ public class SourceWizardBean implements Serializable {
             tmpFileUploadPart.write(tmpUploadFile.toString());
         } catch (IOException e) {
             // TODO: Log it!
+            System.err.println(e.toString());
+            e.printStackTrace(System.err);
         }
     }
     
@@ -96,12 +97,29 @@ public class SourceWizardBean implements Serializable {
             fields.add(new Field());
         }
         currentFieldIdx = 0;
-        loadCompositeComponent(formComponent, "ezcomp", "fieldProperties.xhtml", "fieldProperties"+currentFieldIdx);
+        if(!formComponent.getChildren().stream().anyMatch(u -> u.getId().equalsIgnoreCase("fieldProperties"+currentFieldIdx))) {
+            loadCompositeComponent(formComponent, "ezcomp", "fieldProperties.xhtml", "fieldProperties"+currentFieldIdx);
+        }
         // TODO: Reset the preview to a grid!
+        generateTableFromColumnList();
     }
     
-    private void generateTableFromColumnList(List<Field> fields) {
+    private void generateTableFromColumnList() {
+        HtmlDataTable dataTable = new HtmlDataTable();
         
+        fields.stream().map((_item) -> { 
+            HtmlColumn myColumn = new HtmlColumn();
+            HtmlOutputText myColumnHeader = new HtmlOutputText();
+            myColumnHeader.setValue(_item.getName());
+            myColumn.setHeader(myColumnHeader);
+            
+            return myColumn;
+        }).forEach((myColumn) -> {
+            dataTable.getChildren().add(myColumn);
+        });
+        
+        dataTableGroup.getChildren().clear();
+        dataTableGroup.getChildren().add(dataTable);
     }
 
     public static void loadCompositeComponent(UIComponent parent, String libraryName, String resourceName, String id) {
@@ -142,6 +160,17 @@ public class SourceWizardBean implements Serializable {
     
     public void setCurrentFieldName(String name) {
         fields.get(currentFieldIdx).setName(name);
+    }
+    
+    /**
+     * @return the type of the current field
+     */
+    public Field.FieldType getCurrentFieldType() {
+        return fields.get(currentFieldIdx).getType();
+    }
+    
+    public void setCurrentFieldType(String type) {
+        fields.get(currentFieldIdx).setType(Field.FieldType.valueOf(type));
     }
 
     /**

@@ -10,10 +10,28 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <h4>Set Field Properties
-            (<h:outputText value="#{sourceWizardBean.currentFieldIdx + 1} / #{sourceWizardBean.fields.size()}" />)
-        </h4>
-        <label for="form:fieldProperties:name">Name</label>
-        <h:inputText id="name" value="#{sourceWizardBean.currentFieldName}" />
+        <div class="row">
+            <div class="small-12 columns">
+                <h4>Set Field Properties
+                    (<h:outputText value="#{sourceWizardBean.currentFieldIdx + 1} / #{sourceWizardBean.fields.size()}" />)
+                </h4>
+            </div>
+        </div>
+        <div class="row collapse">
+            <div class="small-2 columns">
+                <h:outputLabel for="form:fieldProperties:name" styleClass="right prefix">Name</h:outputLabel>
+            </div>
+            <div class="small-10 columns">
+                <h:inputText id="name" value="#{sourceWizardBean.currentFieldName}" />
+            </div>
+        </div>
+        <div class="row collapse">
+            <div class="small-2 columns">
+                <h:outputLabel for="form:fieldProperties:type" styleClass="right prefix">Type</h:outputLabel>
+            </div>
+            <div class="small-10 columns">
+                <h:inputText id="type" value="#{sourceWizardBean.currentFieldType}" />
+            </div>
+        </div>
     </cc:implementation>
 </html>
